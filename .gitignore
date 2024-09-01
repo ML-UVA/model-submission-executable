@@ -1,4 +1,6 @@
 __pycache__
+.venv
+executables
 
 # secrets
 service_key.json
