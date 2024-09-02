@@ -27,6 +27,7 @@ class Firebase:
                 print('Performed worse than previous submission - not replacing it')
                 return
         new_submission.set(data)
+        print('Results successfully uploaded')
 
     def get_score_function(self, id):
         score_ref = self.ref.child('score_functions')

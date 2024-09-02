@@ -36,4 +36,4 @@ f.add_submission({
     'score': sum(score_func[metric] * res[metric] for metric in score_func),
     'metrics': res
 })
-print('Results successfully uploaded')
+print('Done')
