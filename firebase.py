@@ -17,7 +17,15 @@ class Firebase:
     def add_submission(self, data):
         submission_ref = self.ref.child('submissions')
         data['time'] = time.time()
-        new_submission = submission_ref.push()
+        existing = submission_ref.order_by_child('computing_id').equal_to(data['computing_id']).limit_to_first(1).get()
+        if existing == None or len(existing) == 0:
+            new_submission = submission_ref.push()
+        else:
+            for key in existing:
+                new_submission = submission_ref.child(key)
+            if new_submission.get()['score'] >= data['score']:
+                print('Performed worse than previous submission - not replacing it')
+                return
         new_submission.set(data)
 
     def get_score_function(self, id):

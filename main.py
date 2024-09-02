@@ -24,6 +24,11 @@ score_func = f.get_score_function(args.competition)
 
 load = Eval(args.path, args.competition)
 res = load.eval([(name, metrics[name]) for name in score_func])
+
+print('Your results:')
+for name in res:
+    print(f'{name}: {res[name]:.4f}')
+
 f.add_submission({
     'name': args.name,
     'computing_id': args.computing_id,
@@ -31,8 +36,4 @@ f.add_submission({
     'score': sum(score_func[metric] * res[metric] for metric in score_func),
     'metrics': res
 })
-
-print('Your results:')
-for name in res:
-    print(f'{name}: {res[name]:.4f}')
 print('Results successfully uploaded')
