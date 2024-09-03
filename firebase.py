@@ -29,25 +29,9 @@ class Firebase:
         new_submission.set(data)
         print('Results successfully uploaded')
 
-    def get_score_function(self, id):
+    def get_competition(self, id):
         score_ref = self.ref.child('score_functions')
         data = score_ref.order_by_child('competition_id').equal_to(id).limit_to_first(1).get()
-        if data == None or len(data) == 0:
-            new_func = score_ref.push()
-            new_func.set({
-                'competition_id': id,
-                'function': {
-                    'mse': 0.33,
-                    'mae': 0.33,
-                    'r2': 0.33
-                }
-            })
-            return {
-                'mse': 0.33,
-                'mae': 0.33,
-                'r2': 0.33
-            }
-        else:
-            for key in data:
-                return data[key]['function']
+        for key in data:
+            return data[key]
             

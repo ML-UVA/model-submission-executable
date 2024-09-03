@@ -6,7 +6,9 @@ from torch import device, cuda, no_grad
 class Eval:
     def __init__(self, path, competition):
         self.dataloader = load_dataloader(competition)
+        print('Loaded dataloader')
         self.model = load(path)
+        print('Loaded model')
         self.device = device('cuda' if cuda.is_available() else 'cpu')
 
     def eval(self, metrics):

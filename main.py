@@ -20,10 +20,11 @@ metrics = {
     'r2': r2_score
 }
 f = Firebase()
-score_func = f.get_score_function(args.competition)
+competition = f.get_competition(args.competition)
+score_func = competition['function']
 
-load = Eval(args.path, args.competition)
-res = load.eval([(name, metrics[name]) for name in score_func])
+model_load = Eval(args.path, competition)
+res = model_load.eval([(name, metrics[name]) for name in score_func])
 
 print('Your results:')
 for name in res:
