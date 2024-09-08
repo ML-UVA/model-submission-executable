@@ -6,6 +6,6 @@ def load_dataloader(competition):
     url = competition['url']
     output = 'dataloader.pt'
     download(url, output, quiet=True)
-    dataloader = load('dataloader.pt')
+    dataloader = load('dataloader.pt', weights_only=False)
     remove('dataloader.pt')
     return dataloader
