@@ -17,8 +17,6 @@ class Eval:
 
         with no_grad():
             for inputs, labels in self.dataloader:
-                inputs, labels = inputs.to(self.device), labels.to(self.device)
-
                 outputs = self.model(inputs).squeeze()
 
                 all_preds += list(outputs.cpu().numpy())
