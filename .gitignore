@@ -3,5 +3,5 @@ __pycache__
 executables
 
 # secrets
-service_key.json
+credentials
 creds.py

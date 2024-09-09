@@ -9,7 +9,6 @@ class Eval:
         print('Loaded dataloader')
         self.model = load(path)
         print('Loaded model')
-        self.device = device('cuda' if cuda.is_available() else 'cpu')
 
     def eval(self, metrics):
         all_preds = []
