@@ -1,7 +1,7 @@
 from load_dataloader import *
 
 from torch.jit import load
-from torch import device, cuda, no_grad
+from torch import no_grad
 
 class Eval:
     def __init__(self, path, competition):

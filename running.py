@@ -17,6 +17,7 @@ from firebase import Firebase
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
 f = Firebase()
+delete = '.done'
 
 def validate_creds():
     creds = None
@@ -58,7 +59,7 @@ def download_file(service, file):
     print(f"Downloaded {file['name']}")
 
 def delete_file_from_drive(service, file):
-    service.files().delete(fileId=file['id']).execute()
+    service.files().update(fileId=file['id'], body={'name': delete}).execute()
 
 def evaluate_model(file):
     metrics = {
@@ -91,6 +92,8 @@ while True:
     files = list_models(service)
     print(files)
     for file in files:
+        if file['name'] == delete:
+            continue
         if '.pt' not in file['name']:
             delete_file_from_drive(service, file)
             continue
