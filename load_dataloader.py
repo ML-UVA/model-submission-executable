@@ -1,11 +1,11 @@
-from torch import load
-from gdown import download
-from os import remove
+import torch
 
-def load_dataloader(competition):
-    url = competition['url']
-    output = 'dataloader.pt'
-    download(url, output, quiet=True)
-    dataloader = load('dataloader.pt', weights_only=False)
-    remove('dataloader.pt')
+from firebase import Firebase
+
+def load_dataloader(func_id):
+    # url = competition['url']
+    # output = 'dataloader.pt'
+    # download(url, output, quiet=True)
+    dataloader = torch.load(f'dataloaders/dataloader_{func_id}.pt', weights_only=False)
+    # remove('dataloader.pt')
     return dataloader

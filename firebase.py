@@ -1,15 +1,15 @@
 from creds import get_key, get_db_name
 
-from firebase_admin import initialize_app
-from firebase_admin import credentials
+import firebase_admin
+
 from firebase_admin import db
 import time
 
 class Firebase:
     def __init__(self):
-        cred = credentials.Certificate(get_key())
+        cred = firebase_admin.credentials.Certificate(get_key())
 
-        initialize_app(cred, {
+        firebase_admin.initialize_app(cred, {
             'databaseURL': get_db_name()
         })
         self.ref = db.reference()
@@ -23,7 +23,7 @@ class Firebase:
         else:
             for key in existing:
                 new_submission = submission_ref.child(key)
-            if new_submission.get()['score'] >= data['score']:
+            if new_submission.get()['score'] <= data['score']:
                 print('Performed worse than previous submission - not replacing it')
                 return
         new_submission.set(data)
