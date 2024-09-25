@@ -15,9 +15,9 @@ class Eval:
 
         with torch.no_grad():
             for inputs, labels in self.dataloader:
-                nan = torch.isnan(labels)
-                inputs = torch.Tensor([inputs[i] for i in range(len(inputs)) if nan[i] == 0])
-                labels = torch.Tensor([labels[i] for i in range(len(labels)) if nan[i] == 0])
+                # nan = torch.isnan(labels)
+                # inputs = torch.Tensor([inputs[i] for i in range(len(inputs)) if nan[i] == 0])
+                # labels = torch.Tensor([labels[i] for i in range(len(labels)) if nan[i] == 0])
                 inputs = inputs[:, None]
                 outputs = self.model(inputs).squeeze()
 
