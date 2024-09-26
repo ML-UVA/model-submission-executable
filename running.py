@@ -3,6 +3,7 @@ import time
 import zipfile
 import os
 import gdown
+import shutil
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -25,6 +26,33 @@ metrics = {
     'mae': mean_absolute_error,
     'r2': r2_score
 }
+
+def cleanup():
+    allowed = ['.git',
+        '.gitignore',
+        '.venv',
+        'credentials',
+        'creds.py',
+        'executables',
+        'firebase.py',
+        'google_api_test.ipynb',
+        'load_dataloader.py',
+        'main.py',
+        'models',
+        'model_eval.py',
+        'README.md',
+        'requirements.txt',
+        'running.py',
+        'test.ipynb',
+        '__pycache__'
+    ]
+    for file in os.listdir():
+        if file in allowed:
+            continue
+        if os.path.isfile(file):
+            os.remove(file)
+        else:
+            shutil.rmtree(file)
 
 def validate_creds():
     creds = None
@@ -77,17 +105,22 @@ def evaluate_model(dir):
     for model in os.listdir(dir):
         split_name = model[:-3].split('_')
         if len(split_name) != 2:
-            continue
-
+            print('Zip file structure incorrect')
+            return
         try:
             func_id = int(split_name[1])
         except ValueError:
-            continue
+            print('Zip file structure incorrect')
+            return
 
         dataloader = load_dataloader(func_id)
 
-        model_load = Eval(f'user_models/{model}', dataloader)
-        results = model_load.eval([(name, metrics[name]) for name in score_func])
+        try:
+            model_load = Eval(f'user_models/{model}', dataloader)
+            results = model_load.eval([(name, metrics[name]) for name in score_func])
+        except Exception as e:
+            print(f'Issue running {model}')
+            return
         for metric in results:
             res[metric] += results[metric] / len(os.listdir(dir))
 
@@ -109,10 +142,9 @@ while True:
     files = list_models(service)
     print(files)
     for file in files:
-        
         if file['name'] == delete:
             continue
-        if '.zip' not in file['name']:
+        if not file['name'].endswith('.zip'):
             delete_file_from_drive(service, file)
             continue
 
@@ -136,14 +168,7 @@ while True:
         
         evaluate_model('user_models')
 
-        os.remove(file['name'])
-        for m in os.listdir('user_models'):
-            os.remove(f'user_models/{m}')
-        os.rmdir('user_models')
-        os.remove('dataloaders.zip')
-        for d in os.listdir('dataloaders'):
-            os.remove(f'dataloaders/{d}')
-        os.rmdir('dataloaders')
+        cleanup()
 
         delete_file_from_drive(service, file)
     time.sleep(5)
